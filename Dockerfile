@@ -1,6 +1,6 @@
 FROM scratch
 
-ADD ca-certificates.crt /etc/ssl/certs/
+ADD certificates.pem .
 
 ADD main /
 COPY configs /configs
