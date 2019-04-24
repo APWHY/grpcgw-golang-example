@@ -6,8 +6,9 @@ An Example with TLS: https://github.com/philips/grpc-gateway-example
 # Quick Start - Go Application
 ```bash
 make tools
-make compile-protobuf
+make compile-protobuf # requires you to install protobuf first
 go get ./... # Omit this line if using Go modules
+# set the ENVIRONMENT variable (see below) before running main.go
 go run main.go
 
 curl localhost:8080/_ah/health

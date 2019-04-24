@@ -2,10 +2,10 @@
 package main
 
 import (
+	"net"
 	"net/http"
 	"os"
 	"strings"
-	"net"
 
 	"gitlab.com/loveplus/data-ingest/app"
 	"gitlab.com/loveplus/data-ingest/proto"
@@ -50,7 +50,7 @@ func newGRPCService() error {
 	grpcServer := grpc.NewServer()
 	proto.RegisterHealthServer(grpcServer, protoServices.NewHealthService())
 
-	return grpcServer.Serve(lis)	
+	return grpcServer.Serve(lis)
 }
 
 func newRESTService(ctx context.Context, address string, opts ...runtime.ServeMuxOption) error {
@@ -106,14 +106,14 @@ func Run(address string, opts ...runtime.ServeMuxOption) error {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	
+
 	errorChannel := make(chan error, 2)
 
 	go func() { errorChannel <- newGRPCService() }()
 	go func() { errorChannel <- newRESTService(ctx, address, opts...) }()
-	
+
 	if err := <-errorChannel; err != nil {
 		return err
-	}	
+	}
 	return nil
 }
