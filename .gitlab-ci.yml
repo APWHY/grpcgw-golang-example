@@ -2,6 +2,7 @@ stages:
   - test
 
 testing:
+  image: golang:alpine
   stage: test
   script:
     - make test
