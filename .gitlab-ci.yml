@@ -6,7 +6,7 @@ image: golang
 testing:
   stage: test
   script:
-    - apk --no-cache protobuf
+    - apk add --no-cache protobuf
     - make tools
     - make compile-protobuf
     - go get ./...
