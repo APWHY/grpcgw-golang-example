@@ -16,6 +16,12 @@ install: ## build and install go application executable
 clean:  ## go clean
 	go clean
 
+build: ## create binary
+	go build main.go
+
+test: ## simple running of 'go test' on all directories
+	go test ./...
+
 tools: ## Fetch and install required tools
 	go get -u github.com/grpc-ecosystem/grpc-gateway/...
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
@@ -43,4 +49,4 @@ generate-swagger: ## Generate swagger docs from protobuf files
 	--swagger_out=logtostderr=true:. \
 	$(PROTO_PATH)
 
-	
+

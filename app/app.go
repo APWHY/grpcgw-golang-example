@@ -26,7 +26,7 @@ func LoadConfig() *Config {
 	cfg := Config{}
 
 	if _, err := toml.DecodeFile("configs/"+initialEnv+".toml", &cfg); err != nil {
-		log.Fatalf("Could not load %s config with error: %s", err.Error())
+		log.Fatalf("Could not load %s config with error: %s", initialEnv, err.Error())
 	}
 
 	err := env.Parse(&cfg)
@@ -36,4 +36,9 @@ func LoadConfig() *Config {
 	}
 
 	return &cfg
+}
+
+
+func Sum(x int, y int) int {
+	return x + y
 }

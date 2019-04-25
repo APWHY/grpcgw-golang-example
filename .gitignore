@@ -1,4 +1,5 @@
 .idea/*
+vendor/*
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -17,6 +18,9 @@
 *.*.swp
 *.swo
 *.*.swo
+
+# Generated files (like protobuf ones)
+*.pb.*go
 
 # main binary
 main
