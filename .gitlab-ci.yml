@@ -1,15 +1,8 @@
 stages:
   - test
 
-image: golang
-
-testing:
+run test:
   stage: test
+  image: golang:latest
   script:
-    - sudo apt install protobuf-compiler
-    - make tools
-    - make compile-protobuf
-    - go get ./...
-    - go mod vendor
-    - make test
-
+    - go test -v ./...
