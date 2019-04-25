@@ -5,13 +5,22 @@ An Example with TLS: https://github.com/philips/grpc-gateway-example
 
 # Quick Start - Go Application
 ```bash
+go mod init gitlab.com/loveplus/data-ingest #???????
 make tools
 make compile-protobuf # requires you to install protobuf first
-go get ./... # Omit this line if using Go modules
+go get ./...
+go mod vendor
 # set the ENVIRONMENT variable (see below) before running main.go
 go run main.go
 
 curl localhost:8080/_ah/health
+```
+
+# Building for Docker
+```bash
+make compile-binary
+docker build -t <THING> --build-arg env=<ENVIRONMENT>
+docker run <THING> -p 8080:80808 ...
 ```
 
 # Defining Services
