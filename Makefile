@@ -30,7 +30,7 @@ check: ## run linter and vetter on all directories except for vendors
 	go list ./... | grep -v /vendor/ | xargs -L1 golint
 	go vet
 
-tools: ## Fetch and install required tools
+tools: ## Fetch and install required tools and third party requirements
 	go get -u github.com/grpc-ecosystem/grpc-gateway/...
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
