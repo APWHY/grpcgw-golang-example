@@ -6,5 +6,9 @@ image: golang
 testing:
   stage: test
   script:
+    - make tools
+    - make compile-protobuf
+    - go get ./...
+    - go mod vendor
     - make test
 
