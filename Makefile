@@ -19,8 +19,16 @@ clean:  ## go clean
 build: ## create binary
 	go build main.go
 
+run: ## run main.go
+	make check
+	go run main.go
+
 test: ## simple running of 'go test' on all directories
 	go test ./...
+
+check: ## run linter and vetter on all directories except for vendors
+	go list ./... | grep -v /vendor/ | xargs -L1 golint
+	go vet
 
 tools: ## Fetch and install required tools
 	go get -u github.com/grpc-ecosystem/grpc-gateway/...

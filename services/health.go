@@ -1,4 +1,4 @@
-package protoServices
+package services
 
 import (
 	"context"

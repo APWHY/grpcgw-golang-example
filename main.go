@@ -2,6 +2,7 @@
 package main
 
 import (
+	"context"
 	"net"
 	"net/http"
 	"os"
@@ -9,11 +10,10 @@ import (
 
 	"gitlab.com/loveplus/data-ingest/app"
 	"gitlab.com/loveplus/data-ingest/proto"
-	"gitlab.com/loveplus/data-ingest/protoServices"
+	"gitlab.com/loveplus/data-ingest/services"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	log "github.com/sirupsen/logrus"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
 
@@ -36,19 +36,19 @@ func main() {
 		log.Info("Logging Level Info set.")
 	}
 
-	if err := Run(cfg.ApiPort); err != nil {
+	if err := Run(cfg.APIPort); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func newGRPCService() error {
-	lis, err := net.Listen("tcp", cfg.GrpcPort)
+	lis, err := net.Listen("tcp", cfg.GRPCPort)
 	if err != nil {
 		panic("Failed to start GRPC Services")
 	}
 
 	grpcServer := grpc.NewServer()
-	proto.RegisterHealthServer(grpcServer, protoServices.NewHealthService())
+	proto.RegisterHealthServer(grpcServer, services.NewHealthService())
 
 	return grpcServer.Serve(lis)
 }
@@ -69,7 +69,7 @@ func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handl
 	mux := runtime.NewServeMux(opts...)
 	dialOpts := []grpc.DialOption{grpc.WithInsecure()}
 
-	err := proto.RegisterHealthHandlerFromEndpoint(ctx, mux, cfg.GrpcHost + cfg.GrpcPort, dialOpts)
+	err := proto.RegisterHealthHandlerFromEndpoint(ctx, mux, cfg.GRPCHost+cfg.GRPCPort, dialOpts)
 	if err != nil {
 		return nil, err
 	}

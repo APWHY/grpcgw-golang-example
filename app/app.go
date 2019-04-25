@@ -9,14 +9,16 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Config -- Struct that holds all configuration options for this service
 type Config struct {
 	Environment        string `env:"ENVIRONMENT,required"`
 	IsDebuggingEnabled bool   `env:"ENABLE_DEBUGGING"`
-	ApiPort            string `env:"API_PORT" envDefault:":8080"`
-	GrpcPort           string `env:"GRPC_PORT" envDefault:":8081"`
-	GrpcHost           string `env:"GRPC_HOST" envDefault:"localhost"`
+	APIPort            string `env:"API_PORT" envDefault:":8080"`
+	GRPCPort           string `env:"GRPC_PORT" envDefault:":8081"`
+	GRPCHost           string `env:"GRPC_HOST" envDefault:"localhost"`
 }
 
+// LoadConfig -- Checks the env for the ENVIRONMENT variable to figure out which config/<ENVIRONMENT>.toml file to load
 func LoadConfig() *Config {
 
 	initialEnv := os.Getenv("ENVIRONMENT")
@@ -38,7 +40,9 @@ func LoadConfig() *Config {
 	return &cfg
 }
 
+// TODO remove this function and it's related test
 
+// Sum -- is only temporary bruh wwtf you want
 func Sum(x int, y int) int {
 	return x + y
 }
