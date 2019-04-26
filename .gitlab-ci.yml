@@ -5,4 +5,8 @@ run test:
   stage: test
   image: golang:latest
   script:
+    - ls
+    - ls ..
+    - ls /
+    - pwd
     - go test -v ./...
