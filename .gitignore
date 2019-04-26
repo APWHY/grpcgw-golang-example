@@ -18,8 +18,5 @@
 *.swo
 *.*.swo
 
-# Generated files (like protobuf ones)
-*.pb.*go
-
 # main binary
 main
