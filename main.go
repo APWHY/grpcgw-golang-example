@@ -3,6 +3,7 @@ package main
 
 import (
 	"context"
+	"gitlab.com/loveplus/data-ingest/pet"
 	"net"
 	"net/http"
 	"os"
@@ -35,6 +36,11 @@ func main() {
 		log.SetLevel(log.InfoLevel)
 		log.Info("Logging Level Info set.")
 	}
+
+	petRepo := pet.NewPetRepository(cfg)
+	log.Info("pet repo is ", petRepo)
+	_, _ = petRepo.GetPets(nil)
+	_ = petRepo.InsertPet(nil)
 
 	if err := Run(cfg.APIPort); err != nil {
 		log.Fatal(err)

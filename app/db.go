@@ -4,6 +4,7 @@ import (
 	"errors"
 	"sync"
 
+	_ "github.com/go-sql-driver/mysql" // this is required to drive the the database we connect to
 	"github.com/go-xorm/core"
 	"github.com/go-xorm/xorm"
 	log "github.com/sirupsen/logrus"
@@ -35,6 +36,12 @@ func NewDB(connectionString string) *xorm.Engine {
 		results, err := engine.QueryString("SELECT VERSION() as v")
 		log.Infof("Connected to SQL server:%s", results[0]["v"])
 
+		results, err = engine.QueryString("show tables")
+		log.Infof("Tables are ", results)
+
+		results, err = engine.QueryString("select * from pet")
+		log.Infof("Table contents of table pet: ", results)
+
 		db = engine
 	})
 
@@ -45,7 +52,7 @@ func NewDB(connectionString string) *xorm.Engine {
 //GetDB returns the already initialized DB otherwise error will be returned.
 func GetDB() (*xorm.Engine, error) {
 	if db == nil {
-		return nil, errors.New("Expected DB instance to be in initialized state but found instance as nil")
+		return nil, errors.New("DB -- expected DB instance to be in initialized state but found instance as nil")
 	}
 
 	return db, nil
