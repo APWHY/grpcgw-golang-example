@@ -26,10 +26,6 @@ func init() {
 
 var cfg *app.Config
 
-var mainServer struct {
-	petRepo pet.Repository
-}
-
 func main() {
 	cfg = app.LoadConfig()
 
@@ -41,7 +37,10 @@ func main() {
 		log.Info("Logging Level Info set.")
 	}
 
-	mainServer.petRepo = pet.NewPetRepository(cfg)
+	petRepo := pet.NewPetRepository(cfg)
+	log.Info("pet repo is ", petRepo)
+	_, _ = petRepo.GetPets(nil)
+	_ = petRepo.InsertPet(nil)
 
 	if err := Run(cfg.APIPort); err != nil {
 		log.Fatal(err)
@@ -56,7 +55,6 @@ func newGRPCService() error {
 
 	grpcServer := grpc.NewServer()
 	proto.RegisterHealthServer(grpcServer, services.NewHealthService())
-	proto.RegisterPetServiceServer(grpcServer, services.NewPetService(mainServer.petRepo))
 
 	return grpcServer.Serve(lis)
 }
@@ -69,8 +67,6 @@ func newRESTService(ctx context.Context, address string, opts ...runtime.ServeMu
 	}
 	mux.Handle("/", gw)
 
-	log.Info("serving REST api at address: ", address)
-
 	return http.ListenAndServe(address, allowCORS(mux))
 }
 
@@ -79,15 +75,9 @@ func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handl
 	mux := runtime.NewServeMux(opts...)
 	dialOpts := []grpc.DialOption{grpc.WithInsecure()}
 
-	var errs []error
-
-	errs = append(errs, proto.RegisterHealthHandlerFromEndpoint(ctx, mux, cfg.GRPCHost+cfg.GRPCPort, dialOpts))
-	errs = append(errs, proto.RegisterPetServiceHandlerFromEndpoint(ctx, mux, cfg.GRPCHost+cfg.GRPCPort, dialOpts))
-
-	for _, err := range errs {
-		if err != nil {
-			return nil, err
-		}
+	err := proto.RegisterHealthHandlerFromEndpoint(ctx, mux, cfg.GRPCHost+cfg.GRPCPort, dialOpts)
+	if err != nil {
+		return nil, err
 	}
 
 	return mux, nil
