@@ -29,7 +29,7 @@ build dev:
     - echo pushing ${CONTAINER_NAME}:${TAG}
     - docker push ${CONTAINER_NAME}:${TAG}
   only:
-    - cicd
+    - develop
 
 
 build prod:
