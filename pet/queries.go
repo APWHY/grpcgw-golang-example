@@ -2,22 +2,19 @@ package pet
 
 import (
 	"context"
+	"github.com/asaskevich/govalidator"
 	"github.com/go-xorm/xorm"
 
 	log "github.com/sirupsen/logrus"
 )
 
-const (
-	LoveSchema      = "sbjpa"
-	SalesOrderTable = "sales_order"
-	PaidOrderStatus = 1
-)
-
+// Queries -- holds the instance of the DB that we interface with
 type Queries struct {
 	DB *xorm.Engine
 }
 
-func (repo *Queries) GetPets(ctx context.Context) (int, error) {
+// GetPets -- gets all the pets stored in our db
+func (repo *Queries) GetPets(ctx context.Context) ([]Pet, error) {
 	var pets []Pet
 
 	//_, err := repo.DB.get(&pets)
@@ -27,31 +24,29 @@ func (repo *Queries) GetPets(ctx context.Context) (int, error) {
 	if err != nil {
 		log.Warn("Could not get all pets")
 		log.Error(err)
-		return 0, err
+		return nil, err
 	}
 	log.Info("got some pets for you: ", pets)
-	return len(pets), nil
+	return pets, nil
 }
 
-func (repo *Queries) InsertPet(ctx context.Context) error {
+// InsertPet -- inserts a pet into our db
+func (repo *Queries) InsertPet(ctx context.Context, pet Pet) (Pet, error) {
 	_ = ctx
+	pet.Clean()
+	valid, err := govalidator.ValidateStruct(pet)
 
-	newPet := &Pet{
-		Name:    "fozz",
-		Owner:   "Carlton",
-		Species: "salmon",
-		Sex:     "d",
-		Birth:   "2001-10-11",
-		//Death:   nil,
+	if !valid {
+		log.Error(err)
+		return pet, err
 	}
-
-	_, err := repo.DB.Insert(newPet)
+	_, err = repo.DB.Insert(pet)
 
 	if err != nil {
 		log.Warn("Could not insert pet")
 		log.Error(err)
-		return err
+		return pet, err
 	}
 
-	return nil
+	return pet, nil
 }

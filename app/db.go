@@ -13,6 +13,7 @@ import (
 var db *xorm.Engine
 var once sync.Once
 
+// NewDB -- creates a new xorm Engine instance for us to use for interfacing with the database
 func NewDB(connectionString string) *xorm.Engine {
 
 	once.Do(func() {
@@ -24,23 +25,17 @@ func NewDB(connectionString string) *xorm.Engine {
 
 		engine.SetColumnMapper(core.GonicMapper{})
 
-		if err = engine.Ping(); err != nil {
-			log.Panic(err)
-		}
-
 		// Use an adapter to the logrus Standard logger
 		logger := &logrusAdapter{Logger: log.StandardLogger()}
 		engine.SetLogger(logger)
 		engine.ShowSQL(true)
 
+		if err = engine.Ping(); err != nil {
+			log.Panic(err)
+		}
+
 		results, err := engine.QueryString("SELECT VERSION() as v")
 		log.Infof("Connected to SQL server:%s", results[0]["v"])
-
-		results, err = engine.QueryString("show tables")
-		log.Infof("Tables are ", results)
-
-		results, err = engine.QueryString("select * from pet")
-		log.Infof("Table contents of table pet: ", results)
 
 		db = engine
 	})

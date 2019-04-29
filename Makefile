@@ -20,6 +20,7 @@ build: ## create binary
 	go build main.go
 
 run: ## run main.go
+	make compile-protobuf
 	make check
 	go run main.go
 
