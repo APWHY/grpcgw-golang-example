@@ -13,6 +13,8 @@ import (
 	"gitlab.com/loveplus/data-ingest/proto"
 	"gitlab.com/loveplus/data-ingest/services"
 
+	"rsc.io/quote"
+
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -22,6 +24,7 @@ func init() {
 	//log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stdout)
 	log.SetLevel(log.DebugLevel)
+	log.Info(quote.Hello())
 }
 
 var cfg *app.Config
