@@ -9,15 +9,16 @@ import (
 )
 
 // go:generate moq -out mock_ecomm_repository.test.go . EcommRepository
+
+// Repository -- the interface that we use to exchange data with the database
 type Repository interface {
-	GetPets(ctx context.Context) (int, error)
-	InsertPet(ctx context.Context) error
+	GetPets(context.Context) ([]Pet, error)
+	InsertPet(context.Context, Pet) (Pet, error)
 }
 
+// NewPetRepository -- creates a new implementation of the Repository interface
 func NewPetRepository(config *app.Config) Repository {
-	log.Info("Initializing new Pet Repository instance")
 	retVal := &Queries{DB: app.NewDB(config.EcommCloudDbConnectionString)}
-	log.Info("Instance initialised, trying sync now")
 	err := retVal.DB.Sync2(new(Pet))
 	if err != nil {
 		log.Error(err, "error syncing pet")
