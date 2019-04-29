@@ -4,7 +4,7 @@ GRPC Gateway: https://github.com/grpc-ecosystem/grpc-gateway
 An Example with TLS: https://github.com/philips/grpc-gateway-example
 
 # Quick Start - Go Application
-Requires `protobuf`
+Requires `protobuf`, `golang-migrate`
 
 ```bash
 go mod init gitlab.com/loveplus/data-ingest #???????

@@ -1,6 +1,8 @@
 GRPC_GOOGLE_APIS:=$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis
 SRC:=$(GOPATH)/src
 PROTO_PATH:=./proto/*.proto
+DB_URI:=mysql://$(ECOMM_CLOUD_DB_CONNECTION_STRING)
+
 
 default: help
 
@@ -57,5 +59,36 @@ generate-swagger: ## Generate swagger docs from protobuf files
 	-I$(GRPC_GOOGLE_APIS) \
 	--swagger_out=logtostderr=true:. \
 	$(PROTO_PATH)
+
+ifeq (dog,$(firstword $(MAKECMDGOALS)))
+	echo whee
+	$(eval echo whee)
+endif
+
+
+ifeq (migrate,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "migrate"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):dummy;@:)
+endif
+
+ifeq (migrate-create,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "migrate-create"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):dummy;@:)
+endif
+
+dummy: ## don't touch this
+
+.PHONY: migrate
+##migrate: ## touch $(date +%s)_migration.up $(date +%s)_migration.down
+migrate: ## performs migrations up -- run 'migrate help for more info'
+	migrate -database '$(DB_URI)' -path ./migrations $(RUN_ARGS)
+
+.PHONY: migrate-create
+migrate-create: ## creates migrations with one argument for a suffix
+	migrate -database '$(DB_URI)' create -dir migrations -ext .sql $(RUN_ARGS)
 
 
