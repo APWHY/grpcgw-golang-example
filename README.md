@@ -20,6 +20,7 @@ curl localhost:8080/_ah/health
 
 # Building for Docker
 ```bash
+make compile-protobuf
 make compile-binary
 docker build -t <THING> --build-arg env=<ENVIRONMENT>
 docker run <THING> -p 8080:80808 ...
@@ -27,16 +28,17 @@ docker run <THING> -p 8080:80808 ...
 
 # Defining Services
 
-Services are defined in `/proto`. When compiled, the generated interfaces need to be implemented. In this example, they're implemented in `/protoServices` but how it's structured is completely up to you.
+Services are defined in `/proto`. When compiled, the generated interfaces need to be implemented. In this example, they're implemented in `/services` but how it's structured is completely up to you.
 
 In the protobuf 3 language, it's very simple to define standard HTTP methods. We define the request model and view model to be returned in the proto files.
 
 The normal approach to the services is:
  1. Define the endpoints and models
  2. Run the protobuf compiler (Provided in the Makefile). This will generate boilerplate GRPC code with interfaces that your services must implement. There is also the added benefit of Swagger docs automatically being generated with a protoc plugin.
- 3. Wire up the new services in `main.go`
+ 3. Wire up the new services in `main.go` (steps 2 and 3 can be run at the same time with `make run`)
 
-There is a complete health endpoint example.
+There is a complete example with two endpoints. The `health` endpoint is a simple service that simply displays that the server is up.
+The `pet` endpoint is a service designed to interact with a database at `ECOMM_CLOUD_DB_CONNECTION_STRING`. It will come with one `GET` and one `POST` request, along with validation and error handling.
 
 # Configurations
 
@@ -50,6 +52,8 @@ Configurations are loaded from the toml files in `/configs`. The behaviour is as
 | Variable | Example | Description |
 | --- | --- | --- |
 | ENVIRONMENT | local | name the config toml files to be the same as the environment variable name.
+| ECOMM_CLOUD_DB_CONNECTION_STRING | `root@tcp(localhost:3306)/test?charset=utf8` | URI connection string for connecting to the database  
+
 
 # Optional Environment Variable Overrides
 | Variable | Example | Description |
