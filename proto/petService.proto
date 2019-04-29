@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+import "proto/util.proto";
+
+message Pet {
+    int32 id      = 1;
+    string name    = 2;
+    string owner   = 3;
+    string species = 4;
+    string sex     = 5;
+    string birth   = 6;
+    string death   = 7;
+    string created = 8;
+    string updated = 9;
+}
+
+
+
+message GetPetsResponse {
+    repeated proto.Pet pets = 1;
+    int32 length = 2;
+    proto.ResponsePayload meta = 3;
+
+}
+
+message PostPetRequest {
+    proto.Pet pet = 1;
+}
+
+message PostPetResponse {
+    proto.Pet pet = 1;
+    proto.ResponsePayload meta = 2;
+}
+
+service PetService {
+    rpc GetPets(google.protobuf.Empty) returns (GetPetsResponse) {
+        // for more information on this option check out github.com/grpc-ecosystem/grpc-gateway
+        option (google.api.http) = {
+          get: "/api/pet"
+        };
+    }
+
+    rpc PostPet(PostPetRequest) returns (PostPetResponse) {
+        option (google.api.http) = {
+          post: "/api/pet"
+          body: "*"
+        };
+    }
+}
