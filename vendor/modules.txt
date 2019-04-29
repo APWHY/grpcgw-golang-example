@@ -1,7 +1,11 @@
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
+# github.com/asaskevich/govalidator v0.0.0-20190424111038-f61b66f89f4a
+github.com/asaskevich/govalidator
 # github.com/caarlos0/env v3.5.0+incompatible
 github.com/caarlos0/env
+# github.com/go-sql-driver/mysql v1.4.1
+github.com/go-sql-driver/mysql
 # github.com/go-xorm/builder v0.3.2
 github.com/go-xorm/builder
 # github.com/go-xorm/core v0.6.2
@@ -44,6 +48,8 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/transform
+# google.golang.org/appengine v1.5.0
+google.golang.org/appengine/cloudsql
 # google.golang.org/genproto v0.0.0-20190418145605-e7d98fc518a7
 google.golang.org/genproto/googleapis/api/annotations
 google.golang.org/genproto/googleapis/api/httpbody
