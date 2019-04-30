@@ -18,7 +18,7 @@ type Repository interface {
 
 // NewPetRepository -- creates a new implementation of the Repository interface
 func NewPetRepository(config *app.Config) Repository {
-	retVal := &Queries{DB: app.NewDB(config.EcommCloudDbConnectionString)}
+	retVal := &Queries{DB: app.NewDB(config.DbConnectionString)}
 	err := retVal.DB.Sync2(new(Pet))
 	if err != nil {
 		log.Error(err, "error syncing pet")

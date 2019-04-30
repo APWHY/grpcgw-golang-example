@@ -10,15 +10,15 @@ import (
 
 // Pet -- an example object that corresponds to a 'pet' table in our database
 type Pet struct {
-	ID      int32          `xorm:"pk autoincr" valid:"-"`
-	Name    string         `xorm:"varchar(20)" valid:"alpha"`
-	Owner   string         `xorm:"varchar(20)" valid:"-"`
-	Species string         `xorm:"varchar(20)" valid:"-"`
-	Sex     string         `xorm:"char(1)" valid:"-"`
-	Birth   string         `xorm:"date" valid:"-"`
+	ID      int32          `xorm:"pk autoincr not null" valid:"-"`
+	Name    string         `xorm:"varchar(20) not null" valid:"alpha"`
+	Owner   string         `xorm:"varchar(20) not null" valid:"-"`
+	Species string         `xorm:"varchar(20) not null" valid:"-"`
+	Sex     string         `xorm:"char(1) not null" valid:"-"`
+	Birth   string         `xorm:"date not null" valid:"-"`
 	Death   sql.NullString `xorm:"date" valid:"-"` //TODO figure out why this doesn't work
-	Created time.Time      `xorm:"created" valid:"-"`
-	Updated time.Time      `xorm:"updated" valid:"-"`
+	Created time.Time      `xorm:"created not null default 'CURRENT_TIMESTAMP'" valid:"-"`
+	Updated time.Time      `xorm:"updated not null default 'CURRENT_TIMESTAMP'" valid:"-"`
 }
 
 // Clean -- Helper function to sanitise the struct before insertion

@@ -1,7 +1,7 @@
 GRPC_GOOGLE_APIS:=$(GOPATH)/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis
 SRC:=$(GOPATH)/src
 PROTO_PATH:=./proto/*.proto
-DB_URI:=mysql://$(ECOMM_CLOUD_DB_CONNECTION_STRING)
+DB_URI:=mysql://$(DB_CONNECTION_STRING)
 
 
 default: help
