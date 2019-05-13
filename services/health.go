@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes/empty"
 
-	"gitlab.com/loveplus/data-ingest/proto"
+	"github.com/APWHY/grpcgw-golang-example/proto"
 )
 
 type healthService struct{}

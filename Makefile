@@ -26,11 +26,18 @@ run: ## run main.go
 	make check
 	go run main.go
 
+run-client: ## run the client to test the grpc gateway
+	go run client/client.go -server_addr "localhost:8081"
+
+run-quick: ## run main.go without the other stuff
+	go run main.go
+
 test: ## simple running of 'go test' on all directories
 	go test ./...
 
-check: ## run linter and vetter on all directories except for vendors
-	go list ./... | grep -v /vendor/ | xargs -L1 golint
+check: ## run linter and vetter on all directories except for vendors. We ignore the package name linting rule from golint as well
+	@echo "running golint..."
+	@go list ./... | grep -v /vendor/ | xargs -L1 golint | { grep -v "don't use an underscore in package name" || true; }
 	go vet
 
 tools: ## Fetch and install required tools and third party requirements
@@ -39,6 +46,7 @@ tools: ## Fetch and install required tools and third party requirements
 	go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
 	go get -u github.com/golang/protobuf/protoc-gen-go
 	go get -u github.com/matryer/moq
+	go get -u golang.org/x/lint/golint
 
 compile-protobuf: ## Compile protocol buffer files
 	protoc -I. -I$(GOPATH)/src \
@@ -60,12 +68,6 @@ generate-swagger: ## Generate swagger docs from protobuf files
 	--swagger_out=logtostderr=true:. \
 	$(PROTO_PATH)
 
-ifeq (dog,$(firstword $(MAKECMDGOALS)))
-	echo whee
-	$(eval echo whee)
-endif
-
-
 ifeq (migrate,$(firstword $(MAKECMDGOALS)))
   # use the rest as arguments for "migrate"
   RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
@@ -81,14 +83,16 @@ ifeq (migrate-create,$(firstword $(MAKECMDGOALS)))
 endif
 
 dummy: ## don't touch this
+	@:
 
 .PHONY: migrate
-##migrate: ## touch $(date +%s)_migration.up $(date +%s)_migration.down
-migrate: ## performs migrations up -- run 'migrate help for more info'
+
+migrate: ## wraps golang-migrate. Use with arguments such as 'up', 'down 2', 'version' etc. run 'migrate help for more info'
 	migrate -database '$(DB_URI)' -path ./migrations $(RUN_ARGS)
 
 .PHONY: migrate-create
 migrate-create: ## creates migrations with one argument for a suffix
 	migrate -database '$(DB_URI)' create -dir migrations -ext .sql $(RUN_ARGS)
 
-
+kill: ## kills any processes listening on 8081 for when it doesn't shut down properly because I mess up
+	lsof -n -i4TCP:8081 | grep LISTEN | awk '{ print $$2 }' | xargs kill

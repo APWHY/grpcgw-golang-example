@@ -3,15 +3,15 @@ package main
 
 import (
 	"context"
-	"gitlab.com/loveplus/data-ingest/pet"
+	"github.com/APWHY/grpcgw-golang-example/pet"
 	"net"
 	"net/http"
 	"os"
 	"strings"
 
-	"gitlab.com/loveplus/data-ingest/app"
-	"gitlab.com/loveplus/data-ingest/proto"
-	"gitlab.com/loveplus/data-ingest/services"
+	"github.com/APWHY/grpcgw-golang-example/app"
+	"github.com/APWHY/grpcgw-golang-example/proto"
+	"github.com/APWHY/grpcgw-golang-example/services"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	log "github.com/sirupsen/logrus"

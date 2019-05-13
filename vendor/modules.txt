@@ -26,7 +26,7 @@ github.com/golang/protobuf/ptypes
 github.com/golang/protobuf/ptypes/struct
 github.com/golang/protobuf/protoc-gen-go/generator/internal/remap
 github.com/golang/protobuf/protoc-gen-go/plugin
-# github.com/grpc-ecosystem/grpc-gateway v1.8.5
+# github.com/grpc-ecosystem/grpc-gateway v1.8.6
 github.com/grpc-ecosystem/grpc-gateway/runtime
 github.com/grpc-ecosystem/grpc-gateway/utilities
 github.com/grpc-ecosystem/grpc-gateway/internal
@@ -34,6 +34,8 @@ github.com/grpc-ecosystem/grpc-gateway/internal
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/sirupsen/logrus v1.4.1
 github.com/sirupsen/logrus
+# gitlab.com/loveplus/data-ingest v0.0.0-20190508075425-ddbea4378f30
+gitlab.com/loveplus/data-ingest/proto
 # golang.org/x/net v0.0.0-20190424112056-4829fb13d2c6
 golang.org/x/net/trace
 golang.org/x/net/internal/timeseries
@@ -41,16 +43,16 @@ golang.org/x/net/http2
 golang.org/x/net/http2/hpack
 golang.org/x/net/http/httpguts
 golang.org/x/net/idna
-# golang.org/x/sys v0.0.0-20190425045458-9f0b1ff7b46a
+# golang.org/x/sys v0.0.0-20190428183149-804c0c7841b5
 golang.org/x/sys/unix
-# golang.org/x/text v0.3.1
+# golang.org/x/text v0.3.2
 golang.org/x/text/secure/bidirule
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
 golang.org/x/text/transform
 # google.golang.org/appengine v1.5.0
 google.golang.org/appengine/cloudsql
-# google.golang.org/genproto v0.0.0-20190418145605-e7d98fc518a7
+# google.golang.org/genproto v0.0.0-20190508193815-b515fa19cec8
 google.golang.org/genproto/googleapis/api/annotations
 google.golang.org/genproto/googleapis/api/httpbody
 google.golang.org/genproto/protobuf/field_mask

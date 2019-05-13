@@ -7,7 +7,7 @@ An Example with TLS: https://github.com/philips/grpc-gateway-example
 Requires `protobuf`, `golang-migrate`
 
 ```bash
-go mod init gitlab.com/loveplus/data-ingest #???????
+go mod init github.com/APWHY/grpcgw-golang-example/ #???????
 make tools
 make compile-protobuf # requires you to install protobuf first
 go get ./...

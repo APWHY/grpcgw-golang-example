@@ -3,11 +3,11 @@ package services
 import (
 	"context"
 	"database/sql"
-	"gitlab.com/loveplus/data-ingest/pet"
+	"github.com/APWHY/grpcgw-golang-example/pet"
 
 	"github.com/golang/protobuf/ptypes/empty"
 
-	"gitlab.com/loveplus/data-ingest/proto"
+	"github.com/APWHY/grpcgw-golang-example/proto"
 )
 
 type petService struct {

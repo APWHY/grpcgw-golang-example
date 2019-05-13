@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package proto;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+
+message PostEventRequest {
+    string data = 1;
+}
+
+service EventService {
+
+    rpc PostEvent(stream PostEventRequest) returns (google.protobuf.Empty){
+        option (google.api.http) = {
+          post: "/api/event"
+          body: "*"
+        };
+    }
+}

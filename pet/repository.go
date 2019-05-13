@@ -5,7 +5,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"gitlab.com/loveplus/data-ingest/app"
+	"github.com/APWHY/grpcgw-golang-example/app"
 )
 
 // go:generate moq -out mock_ecomm_repository.test.go . EcommRepository

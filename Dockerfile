@@ -24,10 +24,10 @@ FROM golang:1.12.4-alpine as builder
 RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates
 # Create appuser
 RUN adduser -D -g '' appuser
-WORKDIR $GOPATH/src/gitlab.com/loveplus/data-ingest/
+WORKDIR $GOPATH/src/gitlab.com/loveplus/pets/
 COPY . .
 # Build the binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /data-ingest
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /pets
 ############################
 # STEP 2 build a small image
 ############################
@@ -36,7 +36,7 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /etc/passwd /etc/passwd
 # Copy our static executable
-COPY --from=builder /data-ingest /data-ingest
+COPY --from=builder /pets /pets
 # Copy our configs over
 COPY configs /configs
 ARG env
@@ -46,4 +46,4 @@ USER appuser
 # allow us to access ports exposed
 EXPOSE 8080 8081
 # Run the hello binary.
-ENTRYPOINT ["/data-ingest"]
+ENTRYPOINT ["/pets"]
