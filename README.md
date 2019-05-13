@@ -4,19 +4,23 @@ GRPC Gateway: https://github.com/grpc-ecosystem/grpc-gateway
 An Example with TLS: https://github.com/philips/grpc-gateway-example
 
 # Quick Start - Go Application
-Requires `protobuf`, `golang-migrate`
-
+Requires [protobuf](https://github.com/protocolbuffers/protobuf) and [golang-migrate](https://github.com/golang-migrate/migrate).  
+`gofmt`, `golint` and `direnv` (to use `.envrc`) recommended.  
+In a separate console, first run `docker-compose up` to boot up the accompanying `mysql` database.
 ```bash
-go mod init github.com/APWHY/grpcgw-golang-example/ #???????
 make tools
 make compile-protobuf # requires you to install protobuf first
 go get ./...
 go mod vendor
-# set the ENVIRONMENT variable (see below) before running main.go
-go run main.go
 
-curl localhost:8080/_ah/health
+# set the ENVIRONMENT variable (see below) before running main.go
+make run
+
+# alternatively you can run `make run-client` in another console
+curl localhost:8080/_ah/health 
 ```
+
+If you are using this as an example project to work off of, don't forget to run `go mod init` to set up go modules
 
 # Building for Docker
 ```bash
@@ -39,6 +43,26 @@ The normal approach to the services is:
 
 There is a complete example with two endpoints. The `health` endpoint is a simple service that simply displays that the server is up.
 The `pet` endpoint is a service designed to interact with a database at `ECOMM_CLOUD_DB_CONNECTION_STRING`. It will come with one `GET` and one `POST` request, along with validation and error handling.
+
+# Migrations
+
+Migrations are performed with [golang-migrate](https://github.com/golang-migrate/migrate) and are stored in the `/migrations` directory.
+
+Simple migrations can be created by calling `make migrate-create <name-of-migration>`
+
+Migrating up or down can be performed by calling, for example, `make migrate up` or `make migrate down 3`.
+
+More advanced migrations will have to be run manually.
+
+# Testing
+
+Testing can be performed via the standard `go test` interface (wrapped by `make test`). To test the GRPC server, run `make run-client`.
+The code for the client is in the `/client` directory.
+Currently, it does not load from the files in the `configs` folder, so you will have to manually set the required variables before using it.
+All client interactions must also be hard coded, but extensive testing should be done via `go test` anyway.
+
+There are no current real tests that have been written as it is expected that all the implementations are going to be redone anyway.
+
 
 # Configurations
 
