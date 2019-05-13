@@ -13,6 +13,8 @@ make compile-protobuf # requires you to install protobuf first
 go get ./...
 go mod vendor
 
+make migrate up 1 # the second migration is just an example, you only want the first migration
+
 # set the ENVIRONMENT variable (see below) before running main.go
 make run
 
