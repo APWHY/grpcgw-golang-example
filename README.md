@@ -52,7 +52,7 @@ Configurations are loaded from the toml files in `/configs`. The behaviour is as
 | Variable | Example | Description |
 | --- | --- | --- |
 | ENVIRONMENT | local | name the config toml files to be the same as the environment variable name.
-| ECOMM_CLOUD_DB_CONNECTION_STRING | `root@tcp(localhost:3306)/test?charset=utf8` | URI connection string for connecting to the database  
+| DB_CONNECTION_STRING | `root@tcp(localhost:3306)/test?charset=utf8` | URI connection string for connecting to the database  
 
 
 # Optional Environment Variable Overrides
