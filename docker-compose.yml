@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+  mysql:
+    image: mysql:8.0.15
+    container_name: go-grpc-example-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=abc123
+      - MYSQL_DATABASE=test
+    ports:
+      - "3306:3306"
+
+
+
+#to bring up both services: `docker-compose up`
+#to bring both down: `docker-compose stop`
+#to bring up only mysql: `docker-compose up mysql`
+#to stop only mysql `docker-compose stop mysql`

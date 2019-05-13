@@ -3,14 +3,15 @@ package main
 
 import (
 	"context"
+	"github.com/APWHY/grpcgw-golang-example/pet"
 	"net"
 	"net/http"
 	"os"
 	"strings"
 
-	"gitlab.com/loveplus/data-ingest/app"
-	"gitlab.com/loveplus/data-ingest/proto"
-	"gitlab.com/loveplus/data-ingest/services"
+	"github.com/APWHY/grpcgw-golang-example/app"
+	"github.com/APWHY/grpcgw-golang-example/proto"
+	"github.com/APWHY/grpcgw-golang-example/services"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	log "github.com/sirupsen/logrus"
@@ -18,12 +19,16 @@ import (
 )
 
 func init() {
-	log.SetFormatter(&log.JSONFormatter{})
+	//log.SetFormatter(&log.JSONFormatter{})
 	log.SetOutput(os.Stdout)
 	log.SetLevel(log.DebugLevel)
 }
 
 var cfg *app.Config
+
+var mainServer struct {
+	petRepo pet.Repository
+}
 
 func main() {
 	cfg = app.LoadConfig()
@@ -35,6 +40,8 @@ func main() {
 		log.SetLevel(log.InfoLevel)
 		log.Info("Logging Level Info set.")
 	}
+
+	mainServer.petRepo = pet.NewPetRepository(cfg)
 
 	if err := Run(cfg.APIPort); err != nil {
 		log.Fatal(err)
@@ -49,6 +56,7 @@ func newGRPCService() error {
 
 	grpcServer := grpc.NewServer()
 	proto.RegisterHealthServer(grpcServer, services.NewHealthService())
+	proto.RegisterPetServiceServer(grpcServer, services.NewPetService(mainServer.petRepo))
 
 	return grpcServer.Serve(lis)
 }
@@ -61,6 +69,8 @@ func newRESTService(ctx context.Context, address string, opts ...runtime.ServeMu
 	}
 	mux.Handle("/", gw)
 
+	log.Info("serving REST api at address: ", address)
+
 	return http.ListenAndServe(address, allowCORS(mux))
 }
 
@@ -69,9 +79,15 @@ func newGateway(ctx context.Context, opts ...runtime.ServeMuxOption) (http.Handl
 	mux := runtime.NewServeMux(opts...)
 	dialOpts := []grpc.DialOption{grpc.WithInsecure()}
 
-	err := proto.RegisterHealthHandlerFromEndpoint(ctx, mux, cfg.GRPCHost+cfg.GRPCPort, dialOpts)
-	if err != nil {
-		return nil, err
+	var errs []error
+
+	errs = append(errs, proto.RegisterHealthHandlerFromEndpoint(ctx, mux, cfg.GRPCHost+cfg.GRPCPort, dialOpts))
+	errs = append(errs, proto.RegisterPetServiceHandlerFromEndpoint(ctx, mux, cfg.GRPCHost+cfg.GRPCPort, dialOpts))
+
+	for _, err := range errs {
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return mux, nil

@@ -1,0 +1,2 @@
+ALTER TABLE `pet`
+  ADD COLUMN `colour` VARCHAR(30);

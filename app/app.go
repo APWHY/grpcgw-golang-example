@@ -13,6 +13,7 @@ import (
 type Config struct {
 	Environment        string `env:"ENVIRONMENT,required"`
 	IsDebuggingEnabled bool   `env:"ENABLE_DEBUGGING"`
+	DbConnectionString string `env:"DB_CONNECTION_STRING,required"`
 	APIPort            string `env:"API_PORT" envDefault:":8080"`
 	GRPCPort           string `env:"GRPC_PORT" envDefault:":8081"`
 	GRPCHost           string `env:"GRPC_HOST" envDefault:"localhost"`
@@ -30,7 +31,6 @@ func LoadConfig() *Config {
 	if _, err := toml.DecodeFile("configs/"+initialEnv+".toml", &cfg); err != nil {
 		log.Fatalf("Could not load %s config with error: %s", initialEnv, err.Error())
 	}
-
 	err := env.Parse(&cfg)
 
 	if err != nil {
