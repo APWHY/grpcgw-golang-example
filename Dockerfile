@@ -1,20 +1,3 @@
-#FROM scratch
-#
-#ARG env
-#ENV ENVIRONMENT $env
-#
-#ADD certificates.pem /
-#
-#ADD main /
-#COPY configs /configs
-#
-#
-#
-#CMD "export ENVIRONMENT=local"
-#
-#ENTRYPOINT ["/main"]
-
-
 ############################
 # STEP 1 build executable binary
 ############################
@@ -24,7 +7,7 @@ FROM golang:1.12.4-alpine as builder
 RUN apk update && apk add --no-cache ca-certificates && update-ca-certificates
 # Create appuser
 RUN adduser -D -g '' appuser
-WORKDIR $GOPATH/src/gitlab.com/loveplus/pets/
+WORKDIR $GOPATH/src/github.com/APWHY/grpcgw-golang-example
 COPY . .
 # Build the binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o /pets
@@ -39,11 +22,13 @@ COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /pets /pets
 # Copy our configs over
 COPY configs /configs
-ARG env
-ENV ENVIRONMENT $env
+ARG ENVIRONMENT
+ARG DB_CONNECTION_STRING
+ENV ENVIRONMENT $ENVIRONMENT
+ENV DB_CONNECTION_STRING $DB_CONNECTION_STRING
 # Use an unprivileged user.
 USER appuser
 # allow us to access ports exposed
 EXPOSE 8080 8081
-# Run the hello binary.
+# Run the binary.
 ENTRYPOINT ["/pets"]

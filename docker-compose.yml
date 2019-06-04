@@ -2,7 +2,7 @@ version: '3.7'
 services:
   mysql:
     image: mysql:8.0.15
-    container_name: go-grpc-example-mysql
+    container_name: go-grpcgw-example-mysql
     command: --default-authentication-plugin=mysql_native_password
     environment:
       - MYSQL_ROOT_PASSWORD=abc123
@@ -10,9 +10,22 @@ services:
     ports:
       - "3306:3306"
 
+  pet:
+    image: grpcgw-eg:latest # create this with the command docker build -t grpcgw-eg:latest --build-arg ENVIRONMENT .
+    container_name: go-grpcgw-example-pet # ENVIRONMENT needs to be explicitly set because it is seperately called with os.Getenv and not setting it explicitly makes app/app.go fail
+    environment:
+      - ENVIRONEMNT=local
+      - DB_CONNECTION_STRING=root:abc123@tcp(mysql:3306)/test?charset=utf8
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+
 
 
 #to bring up both services: `docker-compose up`
 #to bring both down: `docker-compose stop`
 #to bring up only mysql: `docker-compose up mysql`
 #to stop only mysql `docker-compose stop mysql`
+
+# You need to run 'docker-compose up mysql' and wait for it to finish before being able to run 'docker-compose up pet'
+# otherwise pet will not be able to connect to mysql

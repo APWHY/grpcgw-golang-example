@@ -37,6 +37,8 @@ func LoadConfig() *Config {
 		log.Fatalf("Failed to load env variables. %+v\n", err)
 	}
 
+	log.Info(cfg)
+
 	return &cfg
 }
 
