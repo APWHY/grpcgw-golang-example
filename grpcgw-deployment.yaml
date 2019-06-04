@@ -12,7 +12,7 @@ spec:
     app: grpcgw
   type: NodePort
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1 
 kind: Deployment
 metadata:
   name: grpcgw
@@ -32,7 +32,6 @@ spec:
         imagePullPolicy: Never
         name: grpcgw
         env:
-          # Use secret in real usage
         - name: DB_CONNECTION_STRING
           value: root:abc123@tcp(192.168.99.100:31232)/test?charset=utf8
         - name: ENVIRONMENT

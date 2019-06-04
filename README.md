@@ -66,6 +66,20 @@ All client interactions must also be hard coded, but extensive testing should be
 There are no current real tests that have been written as it is expected that all the implementations are going to be redone anyway.
 
 
+# Kubernetes and docker-compose
+
+Bring up the project with `docker-compose up` after building `grpcgw` with `docker build -t grpcgw-eg:latest --build-arg ENVIRONMENT .`
+The build arguments are slightly different because we pass environment parameters in through the `docker-compose.yaml` file instead of through our native environment.
+
+This project has been configured to run on a `minikube` cluster. To run, make sure `minikube` has been started up. Then:
+```bash
+kubectl apply -f grpcgw-mysql-pv.yaml
+kubectl apply -f grpcgw-mysql-deployment.yaml
+kubectl apply -f grpcgw-deployment.yaml
+```
+Check that each stage has properly completed before continuing with the deployment. This is still a WIP. 
+
+
 # Configurations
 
 Configurations are loaded from the toml files in `/configs`. The behaviour is as follows:

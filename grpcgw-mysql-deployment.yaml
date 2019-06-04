@@ -10,7 +10,7 @@ spec:
     app: mysql
   type: NodePort
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1 #need to run make migrate up 1 before deploying grpcgw since the db will not be correctly set up the first time yet
 kind: Deployment
 metadata:
   name: mysql
@@ -29,7 +29,6 @@ spec:
       - image: mysql:8.0.15
         name: mysql
         env:
-          # Use secret in real usage
         - name: MYSQL_ROOT_PASSWORD
           value: abc123
         - name: MYSQL_DATABASE
@@ -42,6 +41,5 @@ spec:
           mountPath: /var/lib/mysql
       volumes:
       - name: mysql-persistent-storage
-        # emptyDir: {} # TODO: make this persistent 
         persistentVolumeClaim:
           claimName: mysql-pv-claim
