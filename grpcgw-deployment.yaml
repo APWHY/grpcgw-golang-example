@@ -33,7 +33,7 @@ spec:
         name: grpcgw
         env:
         - name: DB_CONNECTION_STRING
-          value: root:abc123@tcp(192.168.99.100:31232)/test?charset=utf8
+          value: root:9LcVncRj8c@tcp(10.101.84.118:3306)/test?charset=utf8
         - name: ENVIRONMENT
           value: stage
         ports:

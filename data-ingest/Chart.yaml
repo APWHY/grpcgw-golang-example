@@ -1,0 +1,7 @@
+apiVersion: v1
+appVersion: "1.0.0"
+description: takes data and stuffs it into a database
+name: data-ingest
+version: 0.1.0
+sources:
+  - "https://github.com/APWHY/grpcgw-golang-example/tree/develop"

@@ -30,7 +30,7 @@ spec:
         name: mysql
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: abc123
+          value: 9LcVncRj8c
         - name: MYSQL_DATABASE
           value: test
         ports:

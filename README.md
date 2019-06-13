@@ -79,6 +79,17 @@ kubectl apply -f grpcgw-deployment.yaml
 ```
 Check that each stage has properly completed before continuing with the deployment. This is still a WIP. 
 
+# Helm
+
+There is a helm chart for this microservice (more as an exercise than anything else). To run it, you must first do several things:
+
+ 1. Build `grpcgw-eg` with `docker build -t grpcgw-eg:latest --build-arg ENVIRONMENT .`
+ 2. Assuming Helm is set up on your machine, first run a mysql instance with `helm install stable/mysql`
+ 3. Using the instructions provided by the output, add a database (I like to use `test`) to the mysql instance for our microservice to use later
+ 4. Set the `DB_CONNECTION_STRING` environment variable to `'root:<INSERT_MYSQL_PASSWORD>@tcp(127.0.0.1:3306)/test?charset=utf8'` and run `make migrate up 1`
+ 5. Modify the `DB_CONNECTION_STRING` setting in the deployment spec of `/data-ingest/templates/grpcgw.yaml` to reflect the correct service name and password of the running mysql instance
+ 6. Run `helm install data-ingest`. This won't work unless you have minikube configured to look at your local docker repository for our image.
+
 
 # Configurations
 
